@@ -14,12 +14,24 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: "OpenSans",
-        primaryColor: const Color(0xFF075E54),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: const Color(0xFF128C7E), // Use `secondary` for accent color
+        colorScheme: ColorScheme.fromSwatch(
+          // Use a predefined MaterialColor
+        ).copyWith(
+          primary: const Color(0xFF075E54), // Your custom primary color
+          secondary: Colors.white, // Secondary color
         ),
+        scaffoldBackgroundColor: Colors.white, // Set background color
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Color(0xFF075E54), // Ensure FAB uses primary color
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF075E54), // Ensure AppBar uses primary color
+          foregroundColor: Colors.white, // Set text/icon color in AppBar
+        ),
+     
+      
       ),
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }
