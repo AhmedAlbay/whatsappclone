@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
           primary: const Color(0xFF075E54), // Your custom primary color
           secondary: Colors.white, // Secondary color
         ),
+         
         scaffoldBackgroundColor: Colors.white, // Set background color
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Color(0xFF075E54), // Ensure FAB uses primary color

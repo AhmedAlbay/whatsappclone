@@ -1,56 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:whatsappclone/Screens/individual_page.dart';
+import 'package:whatsappclone/model/chat_model.dart';
 
 class CustomCard extends StatefulWidget {
-  const CustomCard({super.key});
-
+  const CustomCard({super.key, required this.chatModel});
+ final ChatModel chatModel;
   @override
   State<CustomCard> createState() => _CustomCardState();
 }
 
 class _CustomCardState extends State<CustomCard> {
+  
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>IndividualPage(chatModel: widget.chatModel,)));
+      },
       child: Column(
         children: [
           ListTile(
             leading: CircleAvatar(
               radius: 30,
               child: SvgPicture.asset(
-                'assets/images/groups.svg',
+               widget.chatModel.isGroup ? "assets/images/groups.svg" :"assets/images/person.svg",
                 height: 37,
                 width: 37,
                 color: Colors.white,
               ),
               backgroundColor: Colors.blueGrey,
             ),
-            trailing: Text("18:45"),
-            title: Text(
-              "Ahmed Mohamed",
+            trailing:  Text(  widget.chatModel.time),
+            title:  Text(
+               widget.chatModel.name,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            subtitle: Row(
+            subtitle:  Row(
               children: [
                 Icon(Icons.done_all),
                 SizedBox(
                   width: 3,
                 ),
                 Text(
-                  "Welcome",
+                    widget.chatModel.currentMessge,
                   style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
+          const Padding(
+            padding: EdgeInsets.only(
               left: 20,
               right: 20,
             ),
             child: Divider(
+              color: Colors.grey,
               thickness: 1,
+              
             ),
           )
         ],
