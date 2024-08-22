@@ -33,7 +33,7 @@ class _IndividualPageState extends State<IndividualPage> {
                 radius: 20,
                 backgroundColor: Colors.blueGrey,
                 child: SvgPicture.asset(
-                  widget.chatModel.isGroup
+                  widget.chatModel.isGroup ?? false
                       ? "assets/images/groups.svg"
                       : "assets/images/person.svg",
                   height: 30,
@@ -53,7 +53,7 @@ class _IndividualPageState extends State<IndividualPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  widget.chatModel.name,
+                  widget.chatModel.name ?? '',
                   style: const TextStyle(
                     fontSize: 18.5,
                     fontWeight: FontWeight.bold,
@@ -187,8 +187,8 @@ class _IndividualPageState extends State<IndividualPage> {
                       ),
                       const SizedBox(width: 10),
                       Padding(
-                        padding:
-                            const EdgeInsets.only(bottom: 8, left: 4, right: 4),
+                        padding: const EdgeInsets.only(
+                            bottom: 8, left: 4, right: 4),
                         child: CircleAvatar(
                           backgroundColor: const Color(0xFF075E54),
                           radius: 22,
@@ -200,6 +200,7 @@ class _IndividualPageState extends State<IndividualPage> {
                       ),
                     ],
                   ),
+               
                 ],
               ),
             ),
@@ -262,7 +263,7 @@ class _IndividualPageState extends State<IndividualPage> {
                   iconCreation(
                     Icons.location_pin,
                     Colors.teal,
-                    "Loaction",
+                    "Location",
                   ),
                   const SizedBox(
                     width: 40,
@@ -283,7 +284,7 @@ class _IndividualPageState extends State<IndividualPage> {
 
   Widget iconCreation(IconData icon, Color color, String text) {
     return InkWell(
-      onTap: (){},
+      onTap: () {},
       child: Column(
         children: [
           CircleAvatar(
@@ -305,4 +306,6 @@ class _IndividualPageState extends State<IndividualPage> {
       ),
     );
   }
+
+ 
 }

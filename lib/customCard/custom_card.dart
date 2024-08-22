@@ -5,18 +5,23 @@ import 'package:whatsappclone/model/chat_model.dart';
 
 class CustomCard extends StatefulWidget {
   const CustomCard({super.key, required this.chatModel});
- final ChatModel chatModel;
+  final ChatModel chatModel;
+
   @override
   State<CustomCard> createState() => _CustomCardState();
 }
 
 class _CustomCardState extends State<CustomCard> {
-  
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>IndividualPage(chatModel: widget.chatModel,)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => IndividualPage(chatModel: widget.chatModel),
+          ),
+        );
       },
       child: Column(
         children: [
@@ -24,26 +29,26 @@ class _CustomCardState extends State<CustomCard> {
             leading: CircleAvatar(
               radius: 30,
               child: SvgPicture.asset(
-               widget.chatModel.isGroup ? "assets/images/groups.svg" :"assets/images/person.svg",
+                widget.chatModel.isGroup == true
+                    ? "assets/images/groups.svg"
+                    : "assets/images/person.svg",
                 height: 37,
                 width: 37,
                 color: Colors.white,
               ),
               backgroundColor: Colors.blueGrey,
             ),
-            trailing:  Text(  widget.chatModel.time),
-            title:  Text(
-               widget.chatModel.name,
+            trailing: Text(widget.chatModel.time ?? ''), // Handle nullable time
+            title: Text(
+              widget.chatModel.name ?? 'No Name', // Handle nullable name
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            subtitle:  Row(
+            subtitle: Row(
               children: [
                 Icon(Icons.done_all),
-                SizedBox(
-                  width: 3,
-                ),
+                SizedBox(width: 3),
                 Text(
-                    widget.chatModel.currentMessge,
+                  widget.chatModel.currentMessage ?? 'No Message', // Handle nullable message
                   style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -57,7 +62,6 @@ class _CustomCardState extends State<CustomCard> {
             child: Divider(
               color: Colors.grey,
               thickness: 1,
-              
             ),
           )
         ],

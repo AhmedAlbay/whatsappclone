@@ -12,52 +12,57 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-
   List<ChatModel> chats = [
     ChatModel(
-      "Hello",
-      "groups.svg",
-      true,
-      "This is Group",
-      "10:09", "done",
+      name: "Hello",
+      icon: "groups.svg",
+      isGroup: true,
+      currentMessage: "This is Group",
+      time: "10:09",
+      status: "done",
     ),
     ChatModel(
-      "World",
-      "person.svg",
-      false,
-      "This is person",
-      "9:09", "done",
+      name: "World",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "done",
     ),
     ChatModel(
-      "Ahmed",
-      "person.svg",
-      false,
-      "This is person",
-      "3:09", "done",
+      name: "Ahmed",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "3:09",
+      status: "done",
     ),
     ChatModel(
-      "Mohamed",
-      "person.svg",
-      false,
-      "This is person",
-      "9:09",
-      "done",
+      name: "Mohamed",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "done",
     ),
     ChatModel(
-      "Ahmed",
-      "person.svg",
-      false,
-      "This is person",
-      "9:09", "done",
+      name: "Ahmed",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "done",
     ),
     ChatModel(
-      "Albay",
-      "person.svg",
-      false,
-      "This is person",
-      "9:09", "done",
+      name: "Albay",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "done",
     ),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +71,7 @@ class _ChatPageState extends State<ChatPage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const SelectContact()
+                builder: (context) => const SelectContact(),
               ));
         },
         child: const Icon(Icons.chat),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsappclone/Screens/create_groups.dart';
 import 'package:whatsappclone/customCard/button_card.dart';
 import 'package:whatsappclone/customCard/contact_card.dart';
 
@@ -12,54 +13,54 @@ class SelectContact extends StatefulWidget {
 }
 
 class _SelectContactState extends State<SelectContact> {
-  List<ChatModel> chatModel = [
+ List<ChatModel>  chatModel = [
     ChatModel(
-      "Hello",
-      "groups.svg",
-      true,
-      "This is Group",
-      "10:09",
-      "WordPress Developer",
+      name: "Hello",
+      icon: "groups.svg",
+      isGroup: true,
+      currentMessage: "This is Group",
+      time: "10:09",
+      status: "WordPress Developer",
     ),
     ChatModel(
-      "World",
-      "person.svg",
-      false,
-      "This is person",
-      "9:09",
-      "Freelancer",
+      name: "World",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "Freelancer",
     ),
     ChatModel(
-      "Ahmed",
-      "person.svg",
-      false,
-      "This is person",
-      "3:09",
-      "UI / UX",
+      name: "Ahmed",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "3:09",
+      status: "UI / UX",
     ),
     ChatModel(
-      "Mohamed",
-      "person.svg",
-      false,
-      "This is person",
-      "9:09",
-      "BackEnd Developer",
+      name: "Mohamed",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "BackEnd Developer",
     ),
     ChatModel(
-      "Ahmed",
-      "person.svg",
-      false,
-      "This is person",
-      "9:09",
-      "Frontend Developer",
+      name: "Ahmed",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "Frontend Developer",
     ),
     ChatModel(
-      "Albay",
-      "person.svg",
-      false,
-      "This is person",
-      "9:09",
-      "Flutter Developer",
+      name: "Albay",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "Flutter Developer",
     ),
   ];
 
@@ -78,7 +79,7 @@ class _SelectContactState extends State<SelectContact> {
             Text(
               "257 contacts",
               style: TextStyle(fontSize: 13, color: Colors.grey),
-            )
+            ),
           ],
         ),
         actions: [
@@ -125,9 +126,19 @@ class _SelectContactState extends State<SelectContact> {
         itemCount: chatModel.length + 2,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return ButtonCard(icon: Icons.groups, name: "New Group");
+            return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) => const CreateGroup(),
+                  ),
+                );
+              },
+              child: const ButtonCard(icon: Icons.groups, name: "New Group"),
+            );
           } else if (index == 1) {
-            return ButtonCard(icon: Icons.person, name: "New Person");
+            return const ButtonCard(icon: Icons.person, name: "New Person");
           } else {
             // Adjusted index to correctly reference chatModel items
             return ContactCard(contact: chatModel[index - 2]);

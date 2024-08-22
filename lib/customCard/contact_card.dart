@@ -4,7 +4,7 @@ import 'package:whatsappclone/model/chat_model.dart';
 
 class ContactCard extends StatefulWidget {
   const ContactCard({super.key, required this.contact});
- final ChatModel contact ;
+  final ChatModel? contact;
   @override
   State<ContactCard> createState() => _ContactCardState();
 }
@@ -12,27 +12,46 @@ class ContactCard extends StatefulWidget {
 class _ContactCardState extends State<ContactCard> {
   @override
   Widget build(BuildContext context) {
-    return     ListTile(
-            leading: CircleAvatar(
+    return ListTile(
+      leading: Container(
+        width: 50,
+        height: 50,
+        child: Stack(
+          children: [
+            CircleAvatar(
               radius: 30,
               child: SvgPicture.asset(
-               "assets/images/person.svg",
+                "assets/images/person.svg",
                 height: 37,
                 width: 37,
                 color: Colors.white,
               ),
               backgroundColor: Colors.blueGrey,
             ),
-           
-            title:  Text(
-               widget.contact.name,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            subtitle:  Text(
-                widget.contact.status,
-              style: TextStyle(fontSize: 13,),
-            ),
-          );
-         
+         widget.contact!.isSelected?   Positioned(
+              right: 5,
+              bottom: 4,
+              child: CircleAvatar(
+                  radius: 11,
+                  backgroundColor: Colors.teal,
+                  child: Icon(
+                    Icons.done,
+                    color: Colors.white,
+                  )),
+            ) : Container(),
+          ],
+        ),
+      ),
+      title: Text(
+        widget.contact!.name ?? '',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      subtitle: Text(
+        widget.contact?.status ??'',
+        style: TextStyle(
+          fontSize: 13,
+        ),
+      ),
+    );
   }
 }
