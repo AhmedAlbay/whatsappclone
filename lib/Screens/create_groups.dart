@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsappclone/customCard/avtar_card.dart';
 import 'package:whatsappclone/customCard/contact_card.dart';
 import '../model/chat_model.dart';
 
@@ -10,7 +11,7 @@ class CreateGroup extends StatefulWidget {
 }
 
 class _CreateGroupState extends State<CreateGroup> {
-  List<ChatModel>  chatModel = [
+  List<ChatModel> chatModel = [
     ChatModel(
       name: "Hello",
       icon: "groups.svg",
@@ -18,6 +19,30 @@ class _CreateGroupState extends State<CreateGroup> {
       currentMessage: "This is Group",
       time: "10:09",
       status: "WordPress Developer",
+    ),
+    ChatModel(
+      name: "World",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "Freelancer",
+    ),
+    ChatModel(
+      name: "World",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "Freelancer",
+    ),
+    ChatModel(
+      name: "World",
+      icon: "person.svg",
+      isGroup: false,
+      currentMessage: "This is person",
+      time: "9:09",
+      status: "Freelancer",
     ),
     ChatModel(
       name: "World",
@@ -60,7 +85,7 @@ class _CreateGroupState extends State<CreateGroup> {
       status: "Flutter Developer",
     ),
   ];
-List <ChatModel>groups =[];
+  List<ChatModel> groups = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,24 +110,67 @@ List <ChatModel>groups =[];
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: chatModel.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              setState(() {
-                if (chatModel[index].isSelected == false) {
-                  chatModel[index].isSelected = true;
-                  groups.add(chatModel[index]);
-                } else {
-                  chatModel[index].isSelected = false;
-                  groups.remove(chatModel[index]);
-                }
-              });
+      body: Stack(
+        children: [
+          ListView.builder(
+            itemCount: chatModel.length,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Container(
+                  height: groups.length> 0? 90 : 10,
+                );
+              }
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    if (chatModel[index - 1].isSelected == false) {
+                      chatModel[index - 1].isSelected = true;
+                      groups.add(chatModel[index]);
+                    } else {
+                      chatModel[index - 1].isSelected = false;
+                      groups.remove(chatModel[index]);
+                    }
+                  });
+                },
+                child: ContactCard(contact: chatModel[index - 1]),
+              );
             },
-            child: ContactCard(contact: chatModel[index]),
-          );
-        },
-      ),);
+          ),
+          groups.length > 0
+              ? Column(
+                  children: [
+                    Container(
+                      height: 75,
+                      color: Colors.white,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: chatModel.length,
+                          itemBuilder: (context, index) {
+                            if (chatModel[index].isSelected == true) {
+                              return InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      groups.remove(chatModel[index]);
+                                      chatModel[index].isSelected = false;
+                                    });
+                                  },
+                                  child: AvtarCard(
+                                    chatModel: chatModel[index],
+                                  ));
+                            } else {
+                              return Container();
+                            }
+                          }),
+                    ),
+                    const Divider(
+                      thickness: 1,
+                      color: Colors.grey,
+                    )
+                  ],
+                )
+              : Container(),
+        ],
+      ),
+    );
   }
 }
