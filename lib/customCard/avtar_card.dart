@@ -19,15 +19,16 @@ class AvtarCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 25,
+                backgroundColor: Colors.blueGrey,
                 child: SvgPicture.asset(
                   "assets/images/person.svg",
                   height: 30,
                   width: 30,
+                  // ignore: deprecated_member_use
                   color: Colors.white,
                 ),
-                backgroundColor: Colors.blueGrey,
               ),
-            Positioned(
+            const Positioned(
                 right: 0,
                 bottom: 0,
                 child: CircleAvatar(
@@ -40,8 +41,8 @@ class AvtarCard extends StatelessWidget {
               ) ,
             ],
           ),
-       SizedBox(height: 2,),
-        Text(chatModel.name ??'' ,style: TextStyle(fontSize: 12),)],
+       const SizedBox(height: 2,),
+        Text(chatModel.name ??'' ,style: const TextStyle(fontSize: 12),)],
       ),
     );
   }

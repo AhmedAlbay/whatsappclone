@@ -40,7 +40,7 @@ class _CameraScreenState extends State<CameraScreen> {
             bottom: 0.0,
             child: Container(
               color: Colors.black,
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 top: 5,
                 bottom: 5,
               ),
@@ -53,7 +53,7 @@ class _CameraScreenState extends State<CameraScreen> {
                     children: [
                       IconButton(
                         onPressed: () {},
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.flash_off,
                           size: 28,
                           color: Colors.white,
@@ -62,7 +62,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       InkWell(
                         child: IconButton(
                           onPressed: () {},
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.panorama_fish_eye,
                             color: Colors.white,
                             size: 70,
@@ -71,7 +71,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.flip_camera_ios,
                           color: Colors.white,
                           size: 28,
@@ -79,10 +79,10 @@ class _CameraScreenState extends State<CameraScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 4,
                   ),
-                  Text("Hold for a video ,tap for Photo" ,style: TextStyle(color: Colors.white),)
+                  const Text("Hold for a video ,tap for Photo" ,style: TextStyle(color: Colors.white),)
                 ],
               ),
             ),

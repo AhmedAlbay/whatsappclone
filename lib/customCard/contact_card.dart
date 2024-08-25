@@ -13,20 +13,21 @@ class _ContactCardState extends State<ContactCard> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Container(
+      leading: SizedBox(
         width: 50,
         height: 50,
         child: Stack(
           children: [
             CircleAvatar(
               radius: 30,
+              backgroundColor: Colors.blueGrey,
               child: SvgPicture.asset(
                 "assets/images/person.svg",
                 height: 37,
                 width: 37,
+                // ignore: deprecated_member_use
                 color: Colors.white,
               ),
-              backgroundColor: Colors.blueGrey,
             ),
          widget.contact!.isSelected?   Positioned(
               right: 5,
