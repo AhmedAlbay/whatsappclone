@@ -5,7 +5,7 @@ import 'Screens/home_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  camera =await availableCameras();
+  cameras =await availableCameras();
   runApp(const MyApp());
 }
 
