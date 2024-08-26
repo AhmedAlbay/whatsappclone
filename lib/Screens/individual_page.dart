@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:whatsappclone/model/chat_model.dart';
@@ -112,7 +114,7 @@ class _IndividualPageState extends State<IndividualPage> {
           ),
         ],
       ),
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -210,7 +212,7 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   Widget bottomSheet() {
-    return Container(
+    return SizedBox(
       height: 270,
       width: MediaQuery.of(context).size.width,
       child: Card(

@@ -29,7 +29,7 @@ class _ContactCardState extends State<ContactCard> {
                 color: Colors.white,
               ),
             ),
-         widget.contact!.isSelected?   Positioned(
+         widget.contact!.isSelected?   const Positioned(
               right: 5,
               bottom: 4,
               child: CircleAvatar(
@@ -45,11 +45,11 @@ class _ContactCardState extends State<ContactCard> {
       ),
       title: Text(
         widget.contact!.name ?? '',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
         widget.contact?.status ??'',
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 13,
         ),
       ),

@@ -28,6 +28,7 @@ class _CustomCardState extends State<CustomCard> {
           ListTile(
             leading: CircleAvatar(
               radius: 30,
+              backgroundColor: Colors.blueGrey,
               child: SvgPicture.asset(
                 widget.chatModel.isGroup == true
                     ? "assets/images/groups.svg"
@@ -36,20 +37,19 @@ class _CustomCardState extends State<CustomCard> {
                 width: 37,
                 color: Colors.white,
               ),
-              backgroundColor: Colors.blueGrey,
             ),
             trailing: Text(widget.chatModel.time ?? ''), // Handle nullable time
             title: Text(
               widget.chatModel.name ?? 'No Name', // Handle nullable name
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             subtitle: Row(
               children: [
-                Icon(Icons.done_all),
-                SizedBox(width: 3),
+                const Icon(Icons.done_all),
+                const SizedBox(width: 3),
                 Text(
                   widget.chatModel.currentMessage ?? 'No Message', // Handle nullable message
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
               ],
             ),

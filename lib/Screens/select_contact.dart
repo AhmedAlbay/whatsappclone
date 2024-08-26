@@ -89,6 +89,7 @@ class _SelectContactState extends State<SelectContact> {
           ),
           PopupMenuButton<String>(
             onSelected: (value) {
+              // ignore: avoid_print
               print(value);
             },
             itemBuilder: (BuildContext context) {

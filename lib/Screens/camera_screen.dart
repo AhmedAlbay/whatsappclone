@@ -3,10 +3,7 @@
 import 'dart:math';
 
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart'; // Import this for getTemporaryDirectory
-import 'package:path/path.dart';
 import 'package:whatsappclone/Screens/video_view_page.dart';
 import 'camera_view_page.dart';
 
@@ -54,7 +51,7 @@ class _CameraScreenState extends State<CameraScreen> {
             future: cameraValue,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return Container(
+                return SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     child: CameraPreview(_cameraController!));
