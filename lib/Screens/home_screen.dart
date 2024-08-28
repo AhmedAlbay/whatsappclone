@@ -1,12 +1,13 @@
 
 import 'package:flutter/material.dart';
 
+import '../model/chat_model.dart';
 import '../pages/camera_page.dart';
 import '../pages/chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
+  const HomeScreen({super.key, required this.chatmodel});
+final List <ChatModel>chatmodel ;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -70,11 +71,11 @@ class _HomeScreenState extends State<HomeScreen>
               Tab(child: Text("Call")),
             ]),
       ),
-      body: TabBarView(controller: _controller, children: const [
-       CameraPage(),
-        ChatPage(),
-        Text("Status"),
-        Text("Call"),
+      body: TabBarView(controller: _controller, children:  [
+       const CameraPage(),
+        ChatPage(chatmodel: widget.chatmodel,),
+        const Text("Status"),
+        const Text("Call"),
       ]),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsappclone/Screens/camera_screen.dart';
+import 'package:whatsappclone/Screens/login_screen.dart';
 import 'Screens/home_screen.dart';
 
 void main() async{
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
      
       
       ),
-      home: const HomeScreen(),
+      home: const LoginScreen(),
     );
   }
 }

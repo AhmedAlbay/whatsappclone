@@ -6,8 +6,10 @@ class ChatModel {
   final bool? isGroup;
   final String? status;
    bool isSelected;
+  final  int? id ;
 
   ChatModel({
+    this.id,
     this.name,
     this.currentMessage,
     this.icon,
