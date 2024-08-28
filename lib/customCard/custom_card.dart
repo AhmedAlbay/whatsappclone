@@ -4,8 +4,9 @@ import 'package:whatsappclone/Screens/individual_page.dart';
 import 'package:whatsappclone/model/chat_model.dart';
 
 class CustomCard extends StatefulWidget {
-  const CustomCard({super.key, required this.chatModel});
+  const CustomCard({super.key, required this.chatModel, required this.sourceChat});
   final ChatModel chatModel;
+    final ChatModel sourceChat ;
 
   @override
   State<CustomCard> createState() => _CustomCardState();
@@ -19,7 +20,9 @@ class _CustomCardState extends State<CustomCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => IndividualPage(chatModel: widget.chatModel),
+            builder: (context) => IndividualPage(
+              sourceChat: widget.sourceChat,
+              chatModel: widget.chatModel),
           ),
         );
       },

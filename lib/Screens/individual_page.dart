@@ -1,8 +1,3 @@
-// ignore_for_file: avoid_print
-
-import 'dart:ffi';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:whatsappclone/customCard/own_message_card.dart';
@@ -11,9 +6,10 @@ import 'package:whatsappclone/model/chat_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class IndividualPage extends StatefulWidget {
-  const IndividualPage({super.key, required this.chatModel});
+  const IndividualPage(
+      {super.key, required this.chatModel, required this.sourceChat});
   final ChatModel chatModel;
-
+  final ChatModel sourceChat;
 
   @override
   State<IndividualPage> createState() => _IndividualPageState();
@@ -22,9 +18,9 @@ class IndividualPage extends StatefulWidget {
 class _IndividualPageState extends State<IndividualPage> {
   final TextEditingController _controller = TextEditingController();
   bool show = false;
-bool issendButton =false ;
+  bool issendButton = false;
   FocusNode focusNode = FocusNode();
-    late IO.Socket socket;
+  late IO.Socket socket;
   void initState() {
     super.initState();
     // connect();
@@ -38,17 +34,34 @@ bool issendButton =false ;
     });
     connect();
   }
- void connect() {
-  socket = IO.io("http://192.168.204.1:5000", <String, dynamic>{
-    "transports": ["websocket"],
-    "autoConnect": false,
-  });
 
-  socket.connect(); // Fixed by adding parentheses to invoke the connect method
-  socket.emit("/test" ,"Asmaa Eldashan");
+  void connect() {
+    socket = IO.io("http://192.168.204.1:5000", <String, dynamic>{
+      "transports": ["websocket"],
+      "autoConnect": false,
+    });
+
+    socket
+        .connect(); // Fixed by adding parentheses to invoke the connect method
+    socket.emit("signin", widget.sourceChat.id);
     socket.onConnect((_) => print("Connected"));
-  print(socket.connected); // This will print the initial connection status
-}
+    print(socket.connected); // This will print the initial connection status
+  }
+
+  void sendMessage(
+    String message,
+    int sourceId,
+    int targetId,
+  ) {
+    socket.emit(
+      "message",
+      {
+        "message": message,
+        "sourceId": sourceId,
+        "targetId": targetId,
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,22 +176,21 @@ bool issendButton =false ;
               children: [
                 ListView(
                   shrinkWrap: true,
-                  children: [
-                  OwnMessageCard(),
-                  ReplyMessageCard(),
-                       OwnMessageCard(),
-                  ReplyMessageCard(),
-                       OwnMessageCard(),
-                  ReplyMessageCard(),
-                       OwnMessageCard(),
-                  ReplyMessageCard(),
-                       OwnMessageCard(),
-                  ReplyMessageCard(),
-                       OwnMessageCard(),
-                  ReplyMessageCard(),
-
-                       OwnMessageCard(),
-                  ReplyMessageCard(),
+                  children: const [
+                    OwnMessageCard(),
+                    ReplyMessageCard(),
+                    OwnMessageCard(),
+                    ReplyMessageCard(),
+                    OwnMessageCard(),
+                    ReplyMessageCard(),
+                    OwnMessageCard(),
+                    ReplyMessageCard(),
+                    OwnMessageCard(),
+                    ReplyMessageCard(),
+                    OwnMessageCard(),
+                    ReplyMessageCard(),
+                    OwnMessageCard(),
+                    ReplyMessageCard(),
                   ],
                 ),
                 Align(
@@ -198,30 +210,25 @@ bool issendButton =false ;
                                 keyboardType: TextInputType.multiline,
                                 minLines: 1,
                                 maxLines: 5,
-                                onChanged: (value){
-                                  if (value.length>0){
+                                onChanged: (value) {
+                                  if (value.length > 0) {
                                     setState(() {
-                                      issendButton=true;
+                                      issendButton = true;
                                     });
-                                  }
-                                  else {
+                                  } else {
                                     setState(() {
-                                      issendButton =false ;
+                                      issendButton = false;
                                     });
                                   }
                                 },
                                 decoration: InputDecoration(
                                   prefixIcon: IconButton(
                                     icon: const Icon(Icons.emoji_emotions),
-                                    onPressed: () {
-                                 
-                                    },
+                                    onPressed: () {},
                                   ),
                                   hintText: "Type a message",
-                                  
                                   hintStyle: TextStyle(color: Colors.grey[600]),
                                   border: OutlineInputBorder(
-                                    
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: BorderSide.none,
                                   ),
@@ -269,11 +276,15 @@ bool issendButton =false ;
                               backgroundColor: const Color(0xFF075E54),
                               radius: 22,
                               child: IconButton(
-                                icon:
-                                     Icon(
-                                      
-                                    issendButton ?Icons.send :  Icons.mic, color: Colors.white),
-                                onPressed: () {},
+                                icon: Icon(
+                                    issendButton ? Icons.send : Icons.mic,
+                                    color: Colors.white),
+                                onPressed: () {
+                                  if(issendButton){
+                                    sendMessage(_controller.text, widget.sourceChat.id ?? 0, widget.chatModel.id ?? 0) ;
+                                    _controller.clear();
+                                  }
+                                },
                               ),
                             ),
                           ),

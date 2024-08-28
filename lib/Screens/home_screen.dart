@@ -6,8 +6,9 @@ import '../pages/camera_page.dart';
 import '../pages/chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, required this.chatmodel});
+  const HomeScreen({super.key, required this.chatmodel, required this.sourceChat});
 final List <ChatModel>chatmodel ;
+final ChatModel sourceChat ;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -73,7 +74,9 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       body: TabBarView(controller: _controller, children:  [
        const CameraPage(),
-        ChatPage(chatmodel: widget.chatmodel,),
+        ChatPage(
+          sourceChat: widget.sourceChat,
+          chatmodel: widget.chatmodel,),
         const Text("Status"),
         const Text("Call"),
       ]),

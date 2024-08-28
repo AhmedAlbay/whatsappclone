@@ -3,8 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:whatsappclone/model/chat_model.dart';
 
 class ContactCard extends StatefulWidget {
-  const ContactCard({super.key, required this.contact});
+  const ContactCard({super.key, required this.contact, });
   final ChatModel? contact;
+
   @override
   State<ContactCard> createState() => _ContactCardState();
 }

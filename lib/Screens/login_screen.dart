@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (builder) => HomeScreen(chatmodel: chats,),
+                      builder: (builder) => HomeScreen(chatmodel: chats,sourceChat: sourceChat,),
                     ),
                   );
                 },
