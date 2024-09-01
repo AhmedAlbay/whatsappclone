@@ -1,26 +1,34 @@
+// import 'package:camera/camera.dart';
+// import 'package:chatapp/CustomUI/CameraUI.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:whatsappclone/customCard/own_message_card.dart';
 import 'package:whatsappclone/customCard/reply_message.dart';
-import 'package:whatsappclone/model/chat_model.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import '../model/chat_model.dart';
+import '../model/message_model.dart';
 
 class IndividualPage extends StatefulWidget {
-  const IndividualPage(
-      {super.key, required this.chatModel, required this.sourceChat});
+ const IndividualPage(
+      {super.key, required this.chatModel, required this.sourchat});
   final ChatModel chatModel;
-  final ChatModel sourceChat;
+  final ChatModel sourchat;
 
   @override
-  State<IndividualPage> createState() => _IndividualPageState();
+  _IndividualPageState createState() => _IndividualPageState();
 }
 
 class _IndividualPageState extends State<IndividualPage> {
-  final TextEditingController _controller = TextEditingController();
   bool show = false;
-  bool issendButton = false;
   FocusNode focusNode = FocusNode();
+  bool sendButton = false;
+  List<MessageModel> messages = [];
+  final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   late IO.Socket socket;
+  @override
   void initState() {
     super.initState();
     // connect();
@@ -36,31 +44,41 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   void connect() {
-    socket = IO.io("http://192.168.204.1:5000", <String, dynamic>{
+    // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
+    socket = IO.io("http://192.168.1.4:5000", <String, dynamic>{
       "transports": ["websocket"],
       "autoConnect": false,
     });
-
-    socket
-        .connect(); // Fixed by adding parentheses to invoke the connect method
-    socket.emit("signin", widget.sourceChat.id);
-    socket.onConnect((_) => print("Connected"));
-    print(socket.connected); // This will print the initial connection status
+    socket.connect();
+    socket.emit("signin", widget.sourchat.id);
+    socket.onConnect((data) {
+      print("Connected");
+      socket.on("message", (msg) {
+        print(msg);
+        setMessage("destination", msg["message"]);
+        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+      });
+    });
+    print(socket.connected);
   }
 
-  void sendMessage(
-    String message,
-    int sourceId,
-    int targetId,
-  ) {
-    socket.emit(
-      "message",
-      {
-        "message": message,
-        "sourceId": sourceId,
-        "targetId": targetId,
-      },
-    );
+  void sendMessage(String message, int sourceId, int targetId) {
+    setMessage("source", message);
+    socket.emit("message",
+        {"message": message, "sourceId": sourceId, "targetId": targetId});
+  }
+
+  void setMessage(String type, String message) {
+    MessageModel messageModel = MessageModel(
+        type: type,
+        message: message,
+        time: DateTime.now().toString().substring(10, 16));
+    print(messages);
+
+    setState(() {
+      messages.add(messageModel);
+    });
   }
 
   @override
@@ -74,226 +92,275 @@ class _IndividualPageState extends State<IndividualPage> {
           fit: BoxFit.cover,
         ),
         Scaffold(
-          appBar: AppBar(
-            leadingWidth: 70,
-            leading: InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+          backgroundColor: Colors.transparent,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(60),
+            child: AppBar(
+              leadingWidth: 70,
+              titleSpacing: 0,
+              leading: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.arrow_back,
+                      size: 24,
+                    ),
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.blueGrey,
+                      child: SvgPicture.asset(
+                        widget.chatModel.isGroup??false
+                            ? "assets/groups.svg"
+                            : "assets/person.svg",
+                        color: Colors.white,
+                        height: 36,
+                        width: 36,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              title: InkWell(
+                onTap: () {},
+                child: Container(
+                  margin: const EdgeInsets.all(6),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.chatModel.name ?? '',
+                        style: const TextStyle(
+                          fontSize: 18.5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text(
+                        "last seen today at 12:05",
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                IconButton(icon: const Icon(Icons.videocam), onPressed: () {}),
+                IconButton(icon: const Icon(Icons.call), onPressed: () {}),
+                PopupMenuButton<String>(
+                  padding: const EdgeInsets.all(0),
+                  onSelected: (value) {
+                    print(value);
+                  },
+                  itemBuilder: (BuildContext contesxt) {
+                    return [
+                      const PopupMenuItem(
+                        value: "View Contact",
+                        child: Text("View Contact"),
+                      ),
+                      const PopupMenuItem(
+                        value: "Media, links, and docs",
+                        child: Text("Media, links, and docs"),
+                      ),
+                      const PopupMenuItem(
+                        value: "Whatsapp Web",
+                        child: Text("Whatsapp Web"),
+                      ),
+                      const PopupMenuItem(
+                        value: "Search",
+                        child: Text("Search"),
+                      ),
+                      const PopupMenuItem(
+                        value: "Mute Notification",
+                        child: Text("Mute Notification"),
+                      ),
+                      const PopupMenuItem(
+                        value: "Wallpaper",
+                        child: Text("Wallpaper"),
+                      ),
+                    ];
+                  },
+                ),
+              ],
+            ),
+          ),
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: WillPopScope(
+              child: Column(
                 children: [
-                  const Icon(Icons.arrow_back),
-                  const SizedBox(width: 5),
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.blueGrey,
-                    child: SvgPicture.asset(
-                      widget.chatModel.isGroup ?? false
-                          ? "assets/images/groups.svg"
-                          : "assets/images/person.svg",
-                      height: 30,
-                      width: 30,
-                      color: Colors.white,
+                  Expanded(
+                    // height: MediaQuery.of(context).size.height - 150,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      controller: _scrollController,
+                      itemCount: messages.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == messages.length) {
+                          return Container(
+                            height: 70,
+                          );
+                        }
+                        if (messages[index].type == "source") {
+                          return OwnMessageCard(
+                            message: messages[index].message,
+                            time: messages[index].time,
+                          );
+                        } else {
+                          return ReplyMessageCard(
+                            message: messages[index].message,
+                            time: messages[index].time,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      height: 70,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width - 60,
+                                child: Card(
+                                  margin: const EdgeInsets.only(
+                                      left: 2, right: 2, bottom: 8),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  child: TextFormField(
+                                    controller: _controller,
+                                    focusNode: focusNode,
+                                    textAlignVertical: TextAlignVertical.center,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 5,
+                                    minLines: 1,
+                                    onChanged: (value) {
+                                      if (value.length > 0) {
+                                        setState(() {
+                                          sendButton = true;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          sendButton = false;
+                                        });
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Type a message",
+                                      hintStyle: const TextStyle(color: Colors.grey),
+                                      prefixIcon: IconButton(
+                                        icon: Icon(
+                                          show
+                                              ? Icons.keyboard
+                                              : Icons.emoji_emotions_outlined,
+                                        ),
+                                        onPressed: () {
+                                          if (!show) {
+                                            focusNode.unfocus();
+                                            focusNode.canRequestFocus = false;
+                                          }
+                                          setState(() {
+                                            show = !show;
+                                          });
+                                        },
+                                      ),
+                                      suffixIcon: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(Icons.attach_file),
+                                            onPressed: () {
+                                              showModalBottomSheet(
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  context: context,
+                                                  builder: (builder) =>
+                                                      bottomSheet());
+                                            },
+                                          ),
+                                          IconButton(
+                                            icon: const Icon(Icons.camera_alt),
+                                            onPressed: () {
+                                              // Navigator.push(
+                                              //     context,
+                                              //     MaterialPageRoute(
+                                              //         builder: (builder) =>
+                                              //             CameraApp()));
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      contentPadding: const EdgeInsets.all(5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: 8,
+                                  right: 2,
+                                  left: 2,
+                                ),
+                                child: CircleAvatar(
+                                  radius: 25,
+                                  backgroundColor: const Color(0xFF128C7E),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      sendButton ? Icons.send : Icons.mic,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      if (sendButton) {
+                                        _scrollController.animateTo(
+                                            _scrollController
+                                                .position.maxScrollExtent,
+                                            duration:
+                                                const Duration(milliseconds: 300),
+                                            curve: Curves.easeOut);
+                                        sendMessage(
+                                            _controller.text,
+                                            widget.sourchat.id ?? 0,
+                                            widget.chatModel.id ??0);
+                                        _controller.clear();
+                                        setState(() {
+                                          sendButton = false;
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-            title: InkWell(
-              onTap: () {},
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.chatModel.name ?? '',
-                      style: const TextStyle(
-                        fontSize: 18.5,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text(
-                      "Last seen at 10:54",
-                      style: TextStyle(
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.video_call_outlined),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.call),
-              ),
-              PopupMenuButton<String>(
-                onSelected: (value) {
-                  print(value);
-                },
-                itemBuilder: (BuildContext context) {
-                  return const [
-                    PopupMenuItem(
-                      value: "View Contact",
-                      child: Text("View Contact"),
-                    ),
-                    PopupMenuItem(
-                      value: "Media, Links, and Docs",
-                      child: Text("Media, Links, and Docs"),
-                    ),
-                    PopupMenuItem(
-                      value: "WhatsApp Web",
-                      child: Text("WhatsApp Web"),
-                    ),
-                    PopupMenuItem(
-                      value: "Search",
-                      child: Text("Search"),
-                    ),
-                    PopupMenuItem(
-                      value: "Mute Notifications",
-                      child: Text("Mute Notifications"),
-                    ),
-                    PopupMenuItem(
-                      value: "Wallpaper",
-                      child: Text("Wallpaper"),
-                    ),
-                  ];
-                },
-              ),
-            ],
-          ),
-          body: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Stack(
-              children: [
-                ListView(
-                  shrinkWrap: true,
-                  children: const [
-                    OwnMessageCard(),
-                    ReplyMessageCard(),
-                    OwnMessageCard(),
-                    ReplyMessageCard(),
-                    OwnMessageCard(),
-                    ReplyMessageCard(),
-                    OwnMessageCard(),
-                    ReplyMessageCard(),
-                    OwnMessageCard(),
-                    ReplyMessageCard(),
-                    OwnMessageCard(),
-                    ReplyMessageCard(),
-                    OwnMessageCard(),
-                    ReplyMessageCard(),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 8, left: 4),
-                              child: TextFormField(
-                                controller: _controller,
-                                textAlignVertical: TextAlignVertical.center,
-                                keyboardType: TextInputType.multiline,
-                                minLines: 1,
-                                maxLines: 5,
-                                onChanged: (value) {
-                                  if (value.length > 0) {
-                                    setState(() {
-                                      issendButton = true;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      issendButton = false;
-                                    });
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  prefixIcon: IconButton(
-                                    icon: const Icon(Icons.emoji_emotions),
-                                    onPressed: () {},
-                                  ),
-                                  hintText: "Type a message",
-                                  hintStyle: TextStyle(color: Colors.grey[600]),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFF075E54),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: const BorderSide(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  suffixIcon: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {
-                                          showModalBottomSheet(
-                                              context: context,
-                                              builder: (builder) =>
-                                                  bottomSheet());
-                                        },
-                                        icon: const Icon(Icons.attach_file),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.send),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 8, left: 4, right: 4),
-                            child: CircleAvatar(
-                              backgroundColor: const Color(0xFF075E54),
-                              radius: 22,
-                              child: IconButton(
-                                icon: Icon(
-                                    issendButton ? Icons.send : Icons.mic,
-                                    color: Colors.white),
-                                onPressed: () {
-                                  if(issendButton){
-                                    sendMessage(_controller.text, widget.sourceChat.id ?? 0, widget.chatModel.id ?? 0) ;
-                                    _controller.clear();
-                                  }
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              onWillPop: () {
+                if (show) {
+                  setState(() {
+                    show = false;
+                  });
+                } else {
+                  Navigator.pop(context);
+                }
+                return Future.value(false);
+              },
             ),
           ),
         ),
@@ -302,11 +369,12 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   Widget bottomSheet() {
-    return SizedBox(
-      height: 270,
+    return Container(
+      height: 278,
       width: MediaQuery.of(context).size.width,
       child: Card(
-        margin: const EdgeInsets.all(18),
+        margin: const EdgeInsets.all(18.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           child: Column(
@@ -315,55 +383,32 @@ class _IndividualPageState extends State<IndividualPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   iconCreation(
-                    Icons.insert_drive_file,
-                    Colors.indigo,
-                    "Document",
-                  ),
+                      Icons.insert_drive_file, Colors.indigo, "Document"),
                   const SizedBox(
                     width: 40,
                   ),
-                  iconCreation(
-                    Icons.camera_alt,
-                    Colors.pink,
-                    "Camera",
-                  ),
+                  iconCreation(Icons.camera_alt, Colors.pink, "Camera"),
                   const SizedBox(
                     width: 40,
                   ),
-                  iconCreation(
-                    Icons.insert_photo,
-                    Colors.purple,
-                    "Gallery",
-                  ),
+                  iconCreation(Icons.insert_photo, Colors.purple, "Gallery"),
                 ],
               ),
               const SizedBox(
-                height: 20,
+                height: 30,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  iconCreation(
-                    Icons.headset,
-                    Colors.orange,
-                    "Audio",
-                  ),
+                  iconCreation(Icons.headset, Colors.orange, "Audio"),
                   const SizedBox(
                     width: 40,
                   ),
-                  iconCreation(
-                    Icons.location_pin,
-                    Colors.teal,
-                    "Location",
-                  ),
+                  iconCreation(Icons.location_pin, Colors.teal, "Location"),
                   const SizedBox(
                     width: 40,
                   ),
-                  iconCreation(
-                    Icons.person,
-                    Colors.purple,
-                    "Contact",
-                  ),
+                  iconCreation(Icons.person, Colors.blue, "Contact"),
                 ],
               ),
             ],
@@ -373,16 +418,18 @@ class _IndividualPageState extends State<IndividualPage> {
     );
   }
 
-  Widget iconCreation(IconData icon, Color color, String text) {
+  Widget iconCreation(IconData icons, Color color, String text) {
     return InkWell(
       onTap: () {},
       child: Column(
         children: [
           CircleAvatar(
-            backgroundColor: color,
             radius: 30,
+            backgroundColor: color,
             child: Icon(
-              icon,
+              icons,
+              // semanticLabel: "Help",
+              size: 29,
               color: Colors.white,
             ),
           ),
@@ -391,10 +438,15 @@ class _IndividualPageState extends State<IndividualPage> {
           ),
           Text(
             text,
-            style: const TextStyle(fontSize: 12),
-          ),
+            style: const TextStyle(
+              fontSize: 12,
+              // fontWeight: FontWeight.w100,
+            ),
+          )
         ],
       ),
     );
   }
+
+  
 }

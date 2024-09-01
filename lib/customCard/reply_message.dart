@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ReplyMessageCard extends StatelessWidget {
-  const ReplyMessageCard({super.key});
-
+  const ReplyMessageCard({super.key, required this.message, required this.time});
+ final String message ;
+ final String time;
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -18,16 +19,16 @@ class ReplyMessageCard extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(
+               Padding(
+                padding: const EdgeInsets.only(
                   left: 8,
                   right: 50,
                   top: 5,
                   bottom: 10,
                 ),
                 child: Text(
-                  "messadhfgjhfhgfdhgfhgfjgfjhgfjfgdjfgdjhgfdjhfgkhgdkhfkgfhge",
-                  style: TextStyle(
+                  message,
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
@@ -36,7 +37,7 @@ class ReplyMessageCard extends StatelessWidget {
                 bottom: 4,
                 right: 10,
                 child: Text(
-                  "18:16",
+                 time,
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey[600],

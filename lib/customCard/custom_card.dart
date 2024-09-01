@@ -21,8 +21,8 @@ class _CustomCardState extends State<CustomCard> {
           context,
           MaterialPageRoute(
             builder: (context) => IndividualPage(
-              sourceChat: widget.sourceChat,
-              chatModel: widget.chatModel),
+          
+              sourchat: widget.sourceChat, chatModel:  widget.chatModel,),
           ),
         );
       },
