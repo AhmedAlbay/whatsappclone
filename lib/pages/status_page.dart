@@ -20,21 +20,21 @@ class StatusPage extends StatelessWidget {
               color: Colors.blueGrey[900],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           FloatingActionButton(
             backgroundColor: Colors.greenAccent[700],
             elevation: 5,
             onPressed: () {},
-            child: Icon(
+            child: const Icon(
               Icons.camera_alt,
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: const SingleChildScrollView(
+        child: const Column(
           children: [
             OwnStatus(),
             Label(title: "Recen Update",),
@@ -42,32 +42,44 @@ class StatusPage extends StatelessWidget {
               imagename: "assets/images/grandfather.png",
               name: "carlo ancelotti",
               subtitle: "this is status",
+              isSeen: false ,
+              statusNum: 1,
             ),
               OtherStatus(
               imagename: "assets/images/uncle.png",
               name: "mohamed magdy afsha",
               subtitle: "this is status",
+               isSeen: false ,
+              statusNum: 20,
             ),
               OtherStatus(
               imagename:  "assets/images/akram.png",
               name: "Akram Tawfik",
               subtitle: "this is status",
+               isSeen: false ,
+              statusNum: 7,
             ),
             Label(title: "Viewed Update"),
                OtherStatus(
               imagename: "assets/images/uncle.png",
               name: "mohamed magdy afsha",
               subtitle: "this is status",
+               isSeen: true ,
+              statusNum: 1,
             ),
               OtherStatus(
               imagename: "assets/images/grandfather.png",
               name: "carlo ancelotti",
               subtitle: "this is status",
+                isSeen: true ,
+              statusNum: 4,
             ),
               OtherStatus(
               imagename: "assets/images/akram.png",
               name: "Akram Tawfik",
               subtitle: "this is status",
+                isSeen: true ,
+              statusNum: 11,
             ),
           ],
         ),
@@ -89,8 +101,8 @@ class Label extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       color: Colors.grey[300],
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 13 ,vertical: 7),
-        child: Text(title ,style: TextStyle(fontSize: 13 ,fontWeight: FontWeight.bold,),)),
+        padding: const EdgeInsets.symmetric(horizontal: 13 ,vertical: 7),
+        child: Text(title ,style: const TextStyle(fontSize: 13 ,fontWeight: FontWeight.bold,),)),
     );
   }
 }

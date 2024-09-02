@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 
 class OwnStatus extends StatelessWidget {
@@ -37,15 +39,14 @@ class OwnStatus extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-    subtitle:Text(
+      subtitle: Text(
         "Tap to Add Update Status",
         style: TextStyle(
           fontSize: 16,
           color: Colors.grey,
-         
         ),
-      ), 
+      ),
     );
-
   }
 }
+ 
