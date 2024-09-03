@@ -10,10 +10,10 @@ class OwnStatus extends StatelessWidget {
     return ListTile(
       leading: Stack(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 27,
             backgroundColor: Colors.grey,
-            backgroundImage: AssetImage(
+            backgroundImage:  AssetImage(
               "assets/images/grandfather.png",
             ),
           ),
@@ -23,7 +23,7 @@ class OwnStatus extends StatelessWidget {
             child: CircleAvatar(
               radius: 10,
               backgroundColor: Colors.greenAccent[700],
-              child: Icon(
+              child: const Icon(
                 Icons.add,
                 size: 20,
                 color: Colors.white,
@@ -32,14 +32,14 @@ class OwnStatus extends StatelessWidget {
           ),
         ],
       ),
-      title: Text(
+      title: const Text(
         "New Status",
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
-      subtitle: Text(
+      subtitle: const Text(
         "Tap to Add Update Status",
         style: TextStyle(
           fontSize: 16,

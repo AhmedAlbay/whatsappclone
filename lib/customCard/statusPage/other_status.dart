@@ -30,14 +30,14 @@ class OtherStatus extends StatelessWidget {
       ),
       title: Text(
         name,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 16,
           color: Colors.grey,
         ),
@@ -60,7 +60,7 @@ class StatusPainter extends CustomPainter {
     final Paint paint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = 6.0
-      ..color = isSeen ? Colors.grey : Color(0xff21bfa6)
+      ..color = isSeen ? Colors.grey : const Color(0xff21bfa6)
       ..style = PaintingStyle.stroke;
     drawArc(canvas, size, paint);
   }

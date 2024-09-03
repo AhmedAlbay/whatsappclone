@@ -34,7 +34,7 @@ class StatusPage extends StatelessWidget {
         ],
       ),
       body: const SingleChildScrollView(
-        child: const Column(
+        child: Column(
           children: [
             OwnStatus(),
             Label(title: "Recen Update",),

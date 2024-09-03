@@ -1,8 +1,11 @@
 // import 'package:camera/camera.dart';
 // import 'package:chatapp/CustomUI/CameraUI.dart';
 
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+// ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:whatsappclone/customCard/own_message_card.dart';
 import 'package:whatsappclone/customCard/reply_message.dart';
@@ -17,6 +20,7 @@ class IndividualPage extends StatefulWidget {
   final ChatModel sourchat;
 
   @override
+  // ignore: library_private_types_in_public_api
   _IndividualPageState createState() => _IndividualPageState();
 }
 
@@ -189,7 +193,7 @@ class _IndividualPageState extends State<IndividualPage> {
               ],
             ),
           ),
-          body: Container(
+          body: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: WillPopScope(
@@ -223,14 +227,14 @@ class _IndividualPageState extends State<IndividualPage> {
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: Container(
+                    child: SizedBox(
                       height: 70,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Row(
                             children: [
-                              Container(
+                              SizedBox(
                                 width: MediaQuery.of(context).size.width - 60,
                                 child: Card(
                                   margin: const EdgeInsets.only(
@@ -246,7 +250,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                     maxLines: 5,
                                     minLines: 1,
                                     onChanged: (value) {
-                                      if (value.length > 0) {
+                                      if (value.isNotEmpty) {
                                         setState(() {
                                           sendButton = true;
                                         });
@@ -369,7 +373,7 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   Widget bottomSheet() {
-    return Container(
+    return SizedBox(
       height: 278,
       width: MediaQuery.of(context).size.width,
       child: Card(
