@@ -2,14 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class CameraViewPage extends StatefulWidget {
-  const CameraViewPage({super.key, required this.path});
+class CameraViewPage extends StatelessWidget {
+  const CameraViewPage(
+      {super.key, required this.path, required this.onImageSend});
   final String path;
-  @override
-  State<CameraViewPage> createState() => _CameraViewPageState();
-}
-
-class _CameraViewPageState extends State<CameraViewPage> {
+  final Function onImageSend;
+  static final TextEditingController _controller =TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,40 +51,48 @@ class _CameraViewPageState extends State<CameraViewPage> {
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width,
-            
               child: Image.file(
-                File(widget.path),
+                File(path),
                 fit: BoxFit.cover,
               ),
             ),
             Positioned(
                 bottom: 0,
                 child: Container(
-                  color: Colors.black38,
-                                width: MediaQuery.of(context).size.width,
-padding: const EdgeInsets.symmetric(vertical: 5 ,horizontal: 8,),
+                    color: Colors.black38,
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 8,
+                    ),
                     child: TextFormField(
-                      style: const TextStyle(color: Colors.white,fontSize: 17),
+                      controller: _controller,
+                      style: const TextStyle(color: Colors.white, fontSize: 17),
                       maxLines: 6,
                       minLines: 1,
-                  decoration: InputDecoration(
-                    hintText: "Add a Caption.....",
-                  
-                    prefixIcon: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.add_photo_alternate,
-                        size: 27,
-                        color: Colors.white,
+                      decoration: InputDecoration(
+                        hintText: "Add a Caption.....",
+                        prefixIcon: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.add_photo_alternate,
+                            size: 27,
+                            color: Colors.white,
+                          ),
+                        ),
+                        suffixIcon: CircleAvatar(
+                          radius: 27,
+                          backgroundColor: Colors.tealAccent[700],
+                          child: IconButton(
+                            icon: const Icon(Icons.done,
+                                color: Colors.white, size: 27),
+                            onPressed: () {
+                              onImageSend(path ,_controller.text.trim());
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                    suffixIcon: CircleAvatar(
-                      radius: 27,
-                      backgroundColor: Colors.tealAccent[700],
-                      child: const Icon(Icons.done ,color: Colors.white ,size: 27,),
-                    )
-                  ),
-                )))
+                    )))
           ],
         ),
       ),

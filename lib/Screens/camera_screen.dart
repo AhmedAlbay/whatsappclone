@@ -10,8 +10,8 @@ import 'camera_view_page.dart';
 List<CameraDescription>? cameras;
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({super.key});
-
+  const CameraScreen({super.key ,required this.onImageSend} );
+final Function onImageSend ;
   @override
   State<CameraScreen> createState() => _CameraScreenState();
 }
@@ -27,7 +27,7 @@ class _CameraScreenState extends State<CameraScreen> {
   void initState() {
     super.initState();
     initializeCamera();
-  }
+  } 
 
   void initializeCamera() async {
     cameras = await availableCameras();
@@ -176,8 +176,10 @@ class _CameraScreenState extends State<CameraScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (builder) => CameraViewPage(path: picture.path),
+          builder: (builder) => CameraViewPage(path: picture.path ,
+          onImageSend: widget.onImageSend,),
         ),
+
       );
     } catch (e) {
       // ignore: avoid_print
